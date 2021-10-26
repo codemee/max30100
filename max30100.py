@@ -191,7 +191,7 @@ class MAX30100(object):
         self.i2c_write(I2C_ADDRESS, MODE_CONFIG, reg | (1 << 3))
 
     def get_temperature(self):
-        intg = _twos_complement(self.i2c.readfrom_mem(I2C_ADDRESS, TEMP_INTG,1)[0])
+        intg = _twos_complement(self.i2c.readfrom_mem(I2C_ADDRESS, TEMP_INTG,1)[0], 8)
         frac = self.i2c.readfrom_mem(I2C_ADDRESS, TEMP_FRAC,1)[0]
         return intg + (frac * 0.0625)
 
