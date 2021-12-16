@@ -149,9 +149,12 @@ class MAX30100(object):
         self.i2c_write(I2C_ADDRESS, MODE_CONFIG, reg | mode)
 
     def set_spo_config(self, sample_rate=100, pulse_width=1600):
+        sample_rate = _get_valid(SAMPLE_RATE, sample_rate)
+        pulse_width = _get_valid(PULSE_WIDTH, pulse_width)
         reg = self.i2c.readfrom_mem(I2C_ADDRESS, SPO2_CONFIG,1)[0]
-        reg = reg & 0xFC  # Set LED pulsewidth to 00
-        self.i2c_write(I2C_ADDRESS, SPO2_CONFIG, reg | pulse_width)
+        # reg = reg & 0xFC  # Set LED pulsewidth to 00
+        reg = reg & 0xD0 # clear bit0~4
+        self.i2c_write(I2C_ADDRESS, SPO2_CONFIG, reg | (sample_rate << 2) | pulse_width)
 
     def enable_spo2(self):
         self.set_mode(MODE_SPO2)

@@ -19,12 +19,11 @@ i2c = I2C(scl=scl,sda=sda)
 print('Scanning I2C devices...')
 print(i2c.scan())
 
-sensor = max30100.MAX30100(i2c=i2c)
+sensor = max30100.MAX30100(i2c=i2c, led_current_ir=50.0, led_current_red=27.1)
+sensor.enable_spo2()
 
 print('Reading MAX30100 registers...')
 print(sensor.get_registers())
-
-sensor.enable_spo2()
 
 print('Reading sensor...')
 
