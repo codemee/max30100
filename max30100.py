@@ -114,7 +114,7 @@ class MAX30100(object):
 
         self.i2c = i2c 
 
-        self.set_mode(MODE_HR)  # Trigger an initial temperature read.
+        self.set_mode(mode)  # Trigger an initial temperature read.
         self.set_led_current(led_current_red, led_current_ir)
         self.set_spo_config(sample_rate, pulse_width)
 
@@ -145,7 +145,8 @@ class MAX30100(object):
 
     def set_mode(self, mode):
         reg = self.i2c.readfrom_mem(I2C_ADDRESS, MODE_CONFIG,1)[0]
-        self.i2c_write(I2C_ADDRESS, MODE_CONFIG, reg & 0x74) # mask the SHDN bit
+        reg = reg & 0xF8  # clear mode bits
+        # self.i2c_write(I2C_ADDRESS, MODE_CONFIG, reg & 0x74) # mask the SHDN bit
         self.i2c_write(I2C_ADDRESS, MODE_CONFIG, reg | mode)
 
     def set_spo_config(self, sample_rate=100, pulse_width=1600):
